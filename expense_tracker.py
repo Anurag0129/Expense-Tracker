@@ -6,7 +6,13 @@ expenses = []
 # *********  START  *** function to add the expenses*** START ***********
 def add_expense():
     category = input("Enter category (e.g. Food, Travel, Rent): ")
-    amount = input("Enter amount: ")
+
+    try:
+        amount = float(input("Enter amount: "))
+    except ValueError:
+        print("Invalid amount. Expense not added.")
+        return
+
     note = input("Enter a short note (optional): ")
     expense = {
         "date": str(date.today()),
@@ -60,6 +66,25 @@ def delete_expense():
         print("Please enter a valid number.")
 # ********* END *** function to delete an expense *** END ***********
 
+# ********* START *** function to show summary *** START ***********
+def show_summary():
+    if not expenses:
+        print("No expenses recorded yet.")
+        return
+
+    total = sum(expense["amount"] for expense in expenses)
+    print(f"\nTotal spent: {total:.2f}")
+
+    category_totals = {}
+    for expense in expenses:
+        cat = expense["category"]
+        category_totals[cat] = category_totals.get(cat, 0) + expense["amount"]
+
+    print("\nSpending by category:")
+    for cat, amt in category_totals.items():
+        print(f"  {cat:<15} {amt:.2f}")
+# ********* END *** function to show summary *** END ***********
+
 
 # ****** function to save the expenses *********
 DATA_FILE = "expenses.json"
@@ -86,8 +111,9 @@ def main():
         print("1. Add Expense")
         print("2. View Expenses")
         print("3. Delete Expense")
-        print("4. Exit")
-        choice = input("Choose an option (1-4): ")
+        print("4. Show Summary")
+        print("5. Exit")
+        choice = input("Choose an option (1-5): ")
         if choice == "1":
             add_expense()
         elif choice == "2":
@@ -95,11 +121,13 @@ def main():
         elif choice == "3":
             delete_expense()
         elif choice == "4":
+            show_summary()
+        elif choice == "5":
             save_expenses()
             print("Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+            print("Invalid choice. Please enter 1 to 5.")
 
 
 if __name__ == "__main__":
