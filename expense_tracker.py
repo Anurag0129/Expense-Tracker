@@ -5,10 +5,16 @@ expenses = []
 
 # *********  START  *** function to add the expenses*** START ***********
 def add_expense():
-    category = input("Enter category (e.g. Food, Travel, Rent): ")
+    category = input("Enter category (e.g. Food, Travel, Rent): ").strip()
+    if not category:
+        print("Category cannot be empty. Expense not added.")
+        return
 
     try:
         amount = float(input("Enter amount: "))
+        if amount <= 0:
+            print("Amount must be greater than zero. Expense not added.")
+            return
     except ValueError:
         print("Invalid amount. Expense not added.")
         return
@@ -81,7 +87,7 @@ def show_summary():
         category_totals[cat] = category_totals.get(cat, 0) + expense["amount"]
 
     print("\nSpending by category:")
-    for cat, amt in category_totals.items():
+    for cat, amt in sorted(category_totals.items()):
         print(f"  {cat:<15} {amt:.2f}")
 # ********* END *** function to show summary *** END ***********
 
