@@ -37,6 +37,30 @@ def view_expenses():
 # ********* END *** function to view the expenses *** END ***********
 
 
+# ********* START *** function to delete an expense *** START ***********
+def delete_expense():
+    if not expenses:
+        print("No expenses to delete.")
+        return
+
+    view_expenses()
+    try:
+        choice = int(input("\nEnter the row number to delete (1, 2, 3...): "))
+        index = choice - 1
+
+        if index < 0 or index >= len(expenses):
+            print("Invalid row number.")
+            return
+
+        removed = expenses.pop(index)
+        save_expenses()
+        print(f"Deleted: {removed['category']} - {removed['amount']} ({removed['note']})")
+
+    except ValueError:
+        print("Please enter a valid number.")
+# ********* END *** function to delete an expense *** END ***********
+
+
 # ****** function to save the expenses *********
 DATA_FILE = "expenses.json"
 
@@ -61,18 +85,21 @@ def main():
         print("\n===== Expense Tracker =====")
         print("1. Add Expense")
         print("2. View Expenses")
-        print("3. Exit")
-        choice = input("Choose an option (1-3): ")
+        print("3. Delete Expense")
+        print("4. Exit")
+        choice = input("Choose an option (1-4): ")
         if choice == "1":
             add_expense()
         elif choice == "2":
             view_expenses()
         elif choice == "3":
+            delete_expense()
+        elif choice == "4":
             save_expenses()
             print("Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter 1, 2, or 3.")
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
 
 if __name__ == "__main__":
